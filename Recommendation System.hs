@@ -49,11 +49,11 @@ checkCount :: String -> [String] -> Int
 checkCount _ [] = 0
 checkCount str (x:xs) | str == x = 1 + checkCount str xs
 				   | otherwise = 0 + checkCount str xs
---inCart item (x:xs)	 
+ 
 count [] _ _ = []
 count (x:xs) totalItems cart = if elem x cart then (x, countNotMe x totalItems cart): count xs totalItems cart
 												else count xs totalItems cart
--- countNotMe: counts from x:xs the occurrences in y such that what we are counting doesn't equal item
+
 countNotMe _ [] _ = []		 
 countNotMe item (x:xs) cart = if item /= x then if count /= 0 then  (x, checkCount x cart): countNotMe item xs cart 
 															else countNotMe item xs cart
@@ -70,11 +70,7 @@ helpercounting items [] = items
 helpercounting items ((i,list):x)=   helpercounting (addPairForAllItems items list) x
 
 
---freqListCart:: String ->[String] -> [(String, Int)] 
---freqListCart user hiscart = helperfreqlistcart user hiscart (getAllUsersStats purchasesHistory)
---helperfreqlistcart _ _ []=[]
---helperfreqlistcart user (h:t2) ((u,(item,items):t1):t) = if (user ==u && item ==h)   then (item,items) else if (user ==u && item /=h) then helperfreqlistcart user t2 ((u,(item,items):t1):t) else user t2 t
- 
+
 freqListCart:: String ->[String] -> [(String, Int)] 
 freqListCart user hiscart = helperfreqlistcart user hiscart (getAllUsersStats purchasesHistory)
 helperfreqlistcart _ _ []=[]
@@ -105,7 +101,7 @@ recommendBasedOnItemsInCart user hiscart = helperreturnindex(helperrecommendEmpt
 purchasesIntersection :: Eq a => [(a,[(a, Int)])] -> [(a,[(a,[(a,Int)])])] -> [[(a,[(a, Int)])]] 
 purchasesIntersection _ []=[]
 purchasesIntersection (list) (((user,items):t)) =helperpurchasesIntersection  list items : purchasesIntersection list t
---helperpurchasesIntersection  (item,listofitems) (item1,listofitems1) = if(item ==item1) then (item ,(addPairForAllItems  listofitems listofitems1)) else (item , [])
+
 helperpurchasesIntersection [] _=[]
 helperpurchasesIntersection _ []=[]
 helperpurchasesIntersection ((item,listofitems):t) ((item1,listofitems1):t1) = if(listofitems ==[] || listofitems1==[]) then helperpurchasesIntersection t t1 else  (item,(addPairForAllItems  listofitems listofitems1)) : helperpurchasesIntersection t t1
@@ -117,15 +113,14 @@ getStats user [] = []
 getStats user ((u, stats):t) = if user == u then stats else getStats user t
 
 freqListUsers :: String -> [(String, Int)]
--- freqListUsers user = helper3 (helperfreqListUsers user (getAllUsersStats purchasesHistory))
+
 freqListUsers user =helper3 (helper2 (purchasesIntersection userStat otherStats))
 				where 
 					allStats = getAllUsersStats purchasesHistory
 					otherStats = removeUser user allStats
 					userStat = getStats user allStats
 					
--- helperfreqListUsers user ((u,hiscarts):t)= if (user==u ) 	then helper2 (purchasesIntersection hiscarts t) 
-															-- else helperfreqListUsers user t
+
 helper2 [] =[]
 helper2 (h:t)=h ++ (helper2 t)
 
